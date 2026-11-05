@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2a0a5e">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg">
+<title>Just Shop</title>
+<style>
+:root{--p:#2a0a5e;--p2:#4b1d9a;--g:#ffd24a;--g2:#c9961a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:#000;color:#fff;font-family:Tahoma,"Segoe UI",Arial,sans-serif;font-weight:800}
+.s{display:none;min-height:100vh;padding:20px 16px 40px;max-width:560px;margin:auto}
+.s.on{display:block}
+h1,h2{color:var(--g);margin:0 0 12px}
+.gold{background:linear-gradient(110deg,var(--g2),var(--g),#fff2b0,var(--g),var(--g2));background-size:250% 100%;color:#2a1a00;border:0;border-radius:18px;font:inherit;font-weight:900;cursor:pointer;animation:sh 2.5s linear infinite;box-shadow:0 0 22px rgba(255,210,74,.45)}
+@keyframes sh{to{background-position:-250% 0}}
+.big{width:100%;padding:26px;font-size:24px;margin:26px 0}
+.sm{padding:12px 16px;font-size:15px;margin:4px 0}
+#splash{position:fixed;inset:0;background:#000;z-index:9;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s}
+#splash svg{width:150px;animation:spin 2.4s linear infinite;filter:drop-shadow(0 0 20px #ffd24a88)}
+@keyframes spin{to{transform:rotateY(360deg)}}
+#splash h1{font-size:44px;letter-spacing:2px;background:linear-gradient(110deg,var(--g2),#fff2b0,var(--g2));background-size:250%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sh 2s linear infinite;margin-top:20px}
+#splash p{color:#cbb;margin:0}
+.top{background:linear-gradient(135deg,var(--p),var(--p2));border-radius:22px;padding:20px;border:1px solid #ffd24a55}
+.top h2{font-size:22px}.top p{margin:0;color:#e8dcff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:#120826;border:1px solid #ffd24a44;border-radius:18px;overflow:hidden;cursor:pointer}
+.card img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.card div{padding:8px 10px;color:var(--g)}.card small{display:block;color:#fff;font-weight:700}
+label{display:block;margin:14px 0 6px;color:var(--g)}
+input{width:100%;padding:14px;border-radius:14px;border:1px solid #ffd24a66;background:#120826;color:#fff;font:inherit;font-size:16px}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chip{padding:14px 8px;border-radius:14px;border:3px solid transparent;font:inherit;font-weight:900;cursor:pointer;text-align:center}
+.chip.on{border-color:var(--g);box-shadow:0 0 14px #ffd24a99}
+.row{display:flex;gap:10px;align-items:center;margin-top:14px}
+.row input[type=checkbox]{width:22px;height:22px}
+#pick{border:2px dashed var(--g);border-radius:18px;padding:18px;text-align:center;color:var(--g);cursor:pointer}
+#pick img{max-width:100%;max-height:220px;border-radius:12px}
+.box{background:#120826;border:1px solid #ffd24a44;border-radius:18px;padding:14px;margin:14px 0}
+.box img,.box video,.box canvas{width:100%;border-radius:12px;display:block}
+textarea{width:100%;height:170px;background:#000;color:#fff;border:1px solid #ffd24a66;border-radius:12px;padding:10px;font:inherit}
+.bar{height:8px;background:#2a1a4a;border-radius:8px;overflow:hidden;margin:10px 0}.bar i{display:block;height:100%;width:0;background:var(--g)}
+.back{background:none;border:0;color:var(--g);font:inherit;font-size:16px;padding:6px 0;cursor:pointer}
+#load{position:fixed;inset:0;background:#000d;z-index:8;display:none;align-items:center;justify-content:center;flex-direction:column;color:var(--g);font-size:20px}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+<linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff2b0"/><stop offset=".5" stop-color="#ffd24a"/><stop offset="1" stop-color="#b8860b"/></linearGradient>
+<symbol id="bag" viewBox="0 0 100 110"><path d="M32 38V28a18 18 0 0 1 36 0v10" fill="none" stroke="url(#gg)" stroke-width="7" stroke-linecap="round"/><path d="M14 38h72l6 62a6 6 0 0 1-6 6H14a6 6 0 0 1-6-6z" fill="url(#gg)"/><path d="M14 38h72l2 20H12z" fill="#fff" opacity=".25"/><path d="M50 4l3 7 8 1-6 5 2 8-7-4-7 4 2-8-6-5 8-1z" fill="#fff2b0" transform="translate(0 -2)"/></symbol></defs></svg>
+
+<div id="splash"><svg viewBox="0 0 100 110"><use href="#bag"/></svg><h1>just shop</h1><p>اصنع متجرك في ثلاثين ثانية</p></div>
+<div id="load"><div id="lt">جارٍ الصنع…</div><div class="bar" style="width:60%"><i id="lb"></i></div></div>
+
+<!-- Home -->
+<section class="s on" id="home">
+ <div class="top"><h2 id="hi"></h2><p>صوّر، ضع السعر، وبِع</p></div>
+ <button class="gold big" id="add">＋ أضف منتج جديد</button>
+ <h2>منتجاتك</h2>
+ <div class="grid" id="list"></div>
+ <p id="empty" style="color:#aaa;text-align:center">لا توجد منتجات بعد</p>
+</section>
+
+<!-- Make -->
+<section class="s" id="make">
+ <button class="back" id="b1">→ رجوع</button>
+ <h2>منتج جديد</h2>
+ <div id="pick">📷 اختر صورة المنتج من هاتفك</div>
+ <input type="file" id="file" accept="image/*" hidden>
+ <label>اختر الخلفية</label>
+ <div class="chips" id="chips">
+  <button class="chip on" data-b="white" style="background:#fff;color:#111">بيضاء نظيفة</button>
+  <button class="chip" data-b="gold" style="background:#000;color:#ffd24a">سوداء وذهبية</button>
+  <button class="chip" data-b="pink" style="background:#ff9ec4;color:#4a0a2a">وردية للتجميل</button>
+  <button class="chip" data-b="blue" style="background:#2b7be0;color:#fff">زرقاء للهواتف</button>
+ </div>
+ <label>اسم المنتج</label><input id="n" placeholder="مثال: حذاء رياضي">
+ <label>السعر</label><input id="p" inputmode="decimal" placeholder="مثال: 250">
+ <label>العملة</label><input id="c" value="ر.س">
+ <label>اسم المحل</label><input id="sh" placeholder="مثال: محل الأناقة">
+ <label>رقم واتساب للطلبات (اختياري، بدون +)</label><input id="ph" inputmode="tel" placeholder="9665xxxxxxxx">
+ <div class="row"><input type="checkbox" id="rm" checked><span>إزالة الخلفية القديمة تلقائياً (تعمل أفضل مع الخلفيات الواحدة)</span></div>
+ <button class="gold big" id="go">✨ make it</button>
+</section>
+
+<!-- Result -->
+<section class="s" id="res">
+ <button class="back" id="b2">→ الرئيسية</button>
+ <h2 id="rt"></h2>
+ <div class="box"><h2>🖼 الصورة</h2><canvas id="cv" width="1080" height="1080"></canvas><button class="gold sm" id="dimg" style="width:100%">تحميل الصورة</button></div>
+ <div class="box"><h2>🎬 فيديو 10 ثوانٍ</h2><div class="bar"><i id="vb"></i></div><video id="vid" controls playsinline loop style="display:none"></video><a id="dvid" download><button class="gold sm" style="width:100%;display:none" id="dvb">تحميل الفيديو</button></a></div>
+ <div class="box"><h2>📝 الوصف</h2><textarea id="ds"></textarea><button class="gold sm" id="cp" style="width:100%">نسخ الوصف</button></div>
+ <div class="box"><h2>🌐 صفحة المنتج</h2><p style="color:#ccc;font-weight:600">صفحة جاهزة فيها الصورة والسعر وزر الطلب. حمّلها وارفعها على أي استضافة (مثل Netlify Drop) لتحصل على رابط.</p><button class="gold sm" id="pg" style="width:100%">تحميل الصفحة</button><button class="gold sm" id="pv" style="width:100%">معاينة الصفحة</button></div>
+</section>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const LS=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k)||'';localStorage.setItem(k,v)}catch(e){return ''}};
+/* ---------- storage (IndexedDB) ---------- */
+const idb=new Promise(r=>{const q=indexedDB.open('justshop',1);q.onupgradeneeded=()=>q.result.createObjectStore('p',{keyPath:'id'});q.onsuccess=()=>r(q.result)});
+const tx=async(m,f)=>{const d=await idb;return new Promise(r=>{const q=f(d.transaction('p',m).objectStore('p'));q.onsuccess=()=>r(q.result)})};
+const getAll=()=>tx('readonly',s=>s.getAll()),put=o=>tx('readwrite',s=>s.put(o)),del=id=>tx('readwrite',s=>s.delete(id));
+/* ---------- nav ---------- */
+const go=id=>{document.querySelectorAll('.s').forEach(e=>e.classList.toggle('on',e.id==id));scrollTo(0,0)};
+setTimeout(()=>{$('#splash').style.opacity=0;setTimeout(()=>$('#splash').remove(),600)},2800);
+async function home(){
+ $('#hi').textContent='أهلاً بك يا '+(LS('shop')||'أيها التاجر')+' 👋';
+ const a=(await getAll()).sort((x,y)=>y.id-x.id);
+ $('#empty').style.display=a.length?'none':'block';
+ $('#list').innerHTML='';
+ a.forEach(p=>{const d=document.createElement('div');d.className='card';d.innerHTML=`<img src="${p.thumb}"><div>${esc(p.price)} ${esc(p.cur)}<small>${esc(p.name)}</small></div>`;d.onclick=()=>show(p);$('#list').append(d)});
+ go('home');
+}
+$('#add').onclick=()=>{$('#sh').value=LS('shop');$('#ph').value=LS('phone');$('#c').value=LS('cur')||'ر.س';go('make')};
+$('#b1').onclick=$('#b2').onclick=home;
+let bg='white',file=null;
+$('#chips').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;bg=b.dataset.b;document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x==b))};
+$('#pick').onclick=()=>$('#file').click();
+$('#file').onchange=e=>{file=e.target.files[0];if(file)$('#pick').innerHTML='<img src="'+URL.createObjectURL(file)+'">'};
+/* ---------- image processing ---------- */
+const loadImg=src=>new Promise((r,j)=>{const i=new Image();i.onload=()=>r(i);i.onerror=j;i.src=src});
+function cutout(img,remove){
+ const M=700,k=Math.min(1,M/Math.max(img.width,img.height)),w=Math.round(img.width*k),h=Math.round(img.height*k);
+ const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d',{willReadFrequently:true});g.drawImage(img,0,0,w,h);
+ if(!remove)return c;
+ const im=g.getImageData(0,0,w,h),d=im.data,N=w*h;
+ const px=(x,y)=>{const i=(y*w+x)*4;return[d[i],d[i+1],d[i+2]]};
+ const cs=[px(2,2),px(w-3,2),px(2,h-3),px(w-3,h-3)];
+ const ref=[0,1,2].map(j=>cs.reduce((a,c)=>a+c[j],0)/4);
+ const near=i=>{const o=i*4;return Math.hypot(d[o]-ref[0],d[o+1]-ref[1],d[o+2]-ref[2])<58};
+ const seen=new Uint8Array(N),st=[];
+ const push=i=>{if(!seen[i]&&near(i)){seen[i]=1;st.push(i)}};
+ for(let x=0;x<w;x++){push(x);push((h-1)*w+x)}for(let y=0;y<h;y++){push(y*w);push(y*w+w-1)}
+ while(st.length){const i=st.pop(),x=i%w,y=(i/w)|0;if(x>0)push(i-1);if(x<w-1)push(i+1);if(y>0)push(i-w);if(y<h-1)push(i+w)}
+ let cnt=0;for(let i=0;i<N;i++)cnt+=seen[i];
+ if(cnt<N*.05||cnt>N*.9)return c; // failed: keep original
+ for(let i=0;i<N;i++){if(seen[i])d[i*4+3]=0}
+ for(let i=0;i<N;i++){if(!seen[i]){const x=i%w,y=(i/w)|0;if((x>0&&seen[i-1])||(x<w-1&&seen[i+1])||(y>0&&seen[i-w])||(y<h-1&&seen[i+w]))d[i*4+3]=120}}
+ g.putImageData(im,0,0);
+ let x0=w,y0=h,x1=0,y1=0;for(let i=0;i<N;i++)if(d[i*4+3]>0){const x=i%w,y=(i/w)|0;x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y)}
+ const o=document.createElement('canvas');o.width=x1-x0+1;o.height=y1-y0+1;o.getContext('2d').drawImage(c,-x0,-y0);return o;
+}
+const BG={
+ white:{t:'#1a1033',d:(g,W,H)=>{const r=g.createRadialGradient(W/2,H*.45,W*.1,W/2,H*.5,W);r.addColorStop(0,'#fff');r.addColorStop(1,'#dcdce6');g.fillStyle=r;g.fillRect(0,0,W,H)}},
+ gold:{t:'#ffd24a',d:(g,W,H)=>{const r=g.createRadialGradient(W/2,H*.45,W*.05,W/2,H*.5,W*.9);r.addColorStop(0,'#3a2c0a');r.addColorStop(1,'#000');g.fillStyle=r;g.fillRect(0,0,W,H);g.strokeStyle='#ffd24a';g.lineWidth=W*.006;g.strokeRect(W*.03,W*.03,W*.94,H-W*.06)}},
+ pink:{t:'#5a0a33',d:(g,W,H)=>{const r=g.createLinearGradient(0,0,W,H);r.addColorStop(0,'#ffe0ee');r.addColorStop(1,'#ff8fbd');g.fillStyle=r;g.fillRect(0,0,W,H)}},
+ blue:{t:'#fff',d:(g,W,H)=>{const r=g.createLinearGradient(0,0,W*.4,H);r.addColorStop(0,'#5db4ff');r.addColorStop(1,'#08307a');g.fillStyle=r;g.fillRect(0,0,W,H)}}
+};
+function scene(g,W,H,c,o,t){
+ const B=BG[o.bg];B.d(g,W,H);
+ const live=t>=0,sq=W>=H*.9;
+ const k=Math.min(W*.78/c.width,H*(sq?.5:.45)/c.height),w=c.width*k,h=c.height*k,cy=H*(sq?.45:.43);
+ const a=live?t*Math.PI*4:0,sx=live?.35+.65*Math.abs(Math.cos(a)):1,bob=live?Math.sin(a*2)*H*.008:0;
+ g.fillStyle='rgba(0,0,0,.3)';g.beginPath();g.ellipse(W/2,cy+h/2+H*.02,w*.42*sx,H*.014,0,0,7);g.fill();
+ g.save();g.translate(W/2,cy+bob);g.scale(sx,1);g.shadowColor='rgba(0,0,0,.45)';g.shadowBlur=W*.04;g.shadowOffsetY=W*.015;g.drawImage(c,-w/2,-h/2,w,h);g.restore();
+ if(live){const x=((t*2)%1)*W*1.6-W*.3,r=g.createLinearGradient(x-90,0,x+90,0);r.addColorStop(0,'rgba(255,255,255,0)');r.addColorStop(.5,'rgba(255,235,160,.13)');r.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=r;g.fillRect(0,0,W,H)}
+ g.direction='rtl';g.textAlign='center';g.textBaseline='middle';
+ g.fillStyle=B.t;g.globalAlpha=.75;g.font=`800 ${W*.04}px Tahoma,Arial`;g.fillText(o.shop,W/2,H*(sq?.05:.045));g.globalAlpha=1;
+ g.font=`900 ${W*.07}px Tahoma,Arial`;g.fillText(o.name,W/2,H*(sq?.115:.1),W*.9);
+ const txt=o.price+' '+o.cur;g.font=`900 ${W*.12}px Tahoma,Arial`;
+ const tw=Math.min(g.measureText(txt).width+W*.12,W*.92),ph=W*.2,py=H*(sq?.86:.84)-ph/2,px=(W-tw)/2;
+ const pg=g.createLinearGradient(0,py,0,py+ph);pg.addColorStop(0,'#4b1d9a');pg.addColorStop(1,'#1d0646');
+ g.beginPath();g.roundRect(px,py,tw,ph,ph/2);g.fillStyle=pg;g.fill();g.lineWidth=W*.007;g.strokeStyle='#ffd24a';g.stroke();
+ const tg=g.createLinearGradient(0,py,0,py+ph);tg.addColorStop(0,'#fff2b0');tg.addColorStop(.5,'#ffd24a');tg.addColorStop(1,'#c9961a');
+ g.shadowColor='#000';g.shadowBlur=W*.01;g.fillStyle=tg;g.fillText(txt,W/2,py+ph/2+W*.005,tw-W*.06);g.shadowBlur=0;
+}
+const toC=async d=>{const i=await loadImg(d);const c=document.createElement('canvas');c.width=i.width;c.height=i.height;c.getContext('2d').drawImage(i,0,0);return c};
+/* ---------- make ---------- */
+const busy=(on,t)=>{$('#load').style.display=on?'flex':'none';if(t)$('#lt').textContent=t};
+$('#go').onclick=async()=>{
+ const n=$('#n').value.trim(),pr=$('#p').value.trim(),sh=$('#sh').value.trim();
+ if(!file)return alert('اختر صورة المنتج أولاً');
+ if(!n||!pr||!sh)return alert('اكتب اسم المنتج والسعر واسم المحل');
+ busy(true,'جارٍ تجهيز الصورة…');
+ try{
+  const img=await loadImg(URL.createObjectURL(file)),c=cutout(img,$('#rm').checked);
+  const o={id:Date.now(),name:n,price:pr,cur:$('#c').value.trim(),shop:sh,phone:$('#ph').value.replace(/\D/g,''),bg,cut:c.toDataURL('image/png')};
+  const t=document.createElement('canvas');t.width=t.height=400;scene(t.getContext('2d'),400,400,c,o,-1);o.thumb=t.toDataURL('image/jpeg',.7);
+  LS('shop',sh);LS('phone',o.phone);LS('cur',o.cur);
+  await put(o);busy(false);file=null;$('#pick').textContent='📷 اختر صورة المنتج من هاتفك';$('#n').value=$('#p').value='';
+  show(o);
+ }catch(e){busy(false);alert('تعذر معالجة الصورة، جرّب صورة أخرى')}
+};
+/* ---------- result ---------- */
+let cur=null,vurl=null;
+const dl=(href,name)=>{const a=document.createElement('a');a.href=href;a.download=name;document.body.append(a);a.click();a.remove()};
+const desc=p=>{const T=[
+`✨ ${p.name} ✨\nجودة عالية وتصميم أنيق يليق بذوقك.\n💰 السعر: ${p.price} ${p.cur}\n🛍 متوفر الآن في ${p.shop}\n📩 للطلب راسلنا الآن قبل نفاد الكمية!`,
+`🔥 عرض خاص من ${p.shop} 🔥\n${p.name}\nمنتج مميز بسعر مناسب: ${p.price} ${p.cur} فقط.\n🚚 نوصّل لك أينما كنت.\nاطلب الآن واحجز قطعتك قبل أن تنتهي!`,
+`${p.name} 🌟\nاختيار رائع لك أو هدية تُسعد من تحب.\nالسعر: ${p.price} ${p.cur}\nمن ${p.shop} — ثقتكم أمانة عندنا 🤍\nللطلب والاستفسار تواصل معنا.`];
+ return T[p.id%3]};
+function page(p,img){
+ const link=p.phone?`https://wa.me/${p.phone}?text=${encodeURIComponent('مرحباً، أريد طلب: '+p.name+' بسعر '+p.price+' '+p.cur)}`:'#';
+ return `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(p.name)} - ${esc(p.shop)}</title><style>body{margin:0;background:#000;color:#fff;font-family:Tahoma,Arial,sans-serif;font-weight:800;text-align:center}.w{max-width:520px;margin:auto;padding:18px}img{width:100%;border-radius:20px;border:2px solid #ffd24a}h1{color:#ffd24a}.pr{font-size:40px;color:#ffd24a;background:#2a0a5e;border:2px solid #ffd24a;border-radius:60px;padding:10px 24px;display:inline-block;margin:14px 0}a.b{display:block;background:linear-gradient(110deg,#c9961a,#ffd24a,#c9961a);color:#2a1a00;font-size:24px;padding:20px;border-radius:18px;text-decoration:none;box-shadow:0 0 20px #ffd24a77}p{color:#bbb}</style></head><body><div class="w"><p>${esc(p.shop)}</p><img src="${img}" alt="${esc(p.name)}"><h1>${esc(p.name)}</h1><div class="pr">${esc(p.price)} ${esc(p.cur)}</div><a class="b" href="${link}">🛒 اطلب الآن</a><p>صُنع بواسطة Just Shop</p></div></body></html>`}
+async function show(p){
+ cur=p;go('res');$('#rt').textContent=p.name;
+ const c=await toC(p.cut),cv=$('#cv');scene(cv.getContext('2d'),1080,1080,c,p,-1);
+ $('#ds').value=desc(p);
+ $('#dimg').onclick=()=>cv.toBlob(b=>dl(URL.createObjectURL(b),p.name+'.png'));
+ $('#cp').onclick=async()=>{try{await navigator.clipboard.writeText($('#ds').value)}catch(e){$('#ds').select();document.execCommand('copy')}$('#cp').textContent='تم النسخ ✓';setTimeout(()=>$('#cp').textContent='نسخ الوصف',1500)};
+ const html=()=>page(p,cv.toDataURL('image/jpeg',.8));
+ $('#pg').onclick=()=>dl(URL.createObjectURL(new Blob([html()],{type:'text/html'})),'product-'+p.id+'.html');
+ $('#pv').onclick=()=>window.open(URL.createObjectURL(new Blob([html()],{type:'text/html'})));
+ $('#vid').style.display=$('#dvb').style.display='none';$('#vb').style.width=0;
+ video(p,c);
+}
+function video(p,c){
+ if(!window.MediaRecorder)return $('#vb').parentElement.outerHTML='<p>متصفحك لا يدعم صنع الفيديو</p>';
+ const W=540,H=960,cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
+ const mt=['video/mp4','video/webm;codecs=vp9','video/webm'].find(m=>MediaRecorder.isTypeSupported(m))||'';
+ const mr=new MediaRecorder(cv.captureStream(30),mt?{mimeType:mt,videoBitsPerSecond:3e6}:{}),ch=[],id=p.id;
+ mr.ondataavailable=e=>e.data.size&&ch.push(e.data);
+ mr.onstop=()=>{if(cur.id!=id)return;const type=mr.mimeType||'video/webm',u=URL.createObjectURL(new Blob(ch,{type}));
+  $('#vid').src=u;$('#vid').style.display='block';$('#dvid').href=u;$('#dvid').download=p.name+(type.includes('mp4')?'.mp4':'.webm');$('#dvb').style.display='block';$('#vb').style.width='100%'};
+ mr.start();const s=performance.now();
+ (function f(){if(cur.id!=id){mr.stop();return}const t=Math.min((performance.now()-s)/1e4,1);scene(g,W,H,c,p,t);$('#vb').style.width=t*100+'%';t<1?requestAnimationFrame(f):mr.stop()})();
+}
+home();
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
